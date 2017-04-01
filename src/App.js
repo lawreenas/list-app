@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'antd';
-import logo from './logo.svg';
-import './App.css';
 import GoogleLogin from 'react-google-login';
 import BookList from './containers/BookList';
 
