@@ -19,8 +19,17 @@ export function fetchUser(googleId) {
 */
 export function registerUser(googleProfile) {
   return axios.post("/users", googleProfile)
-    .then(resp => {
-      console.log(resp);
-      return resp;
+    .then(({data}) => {
+      console.log(data);
+      return data;
+    });
+}
+
+export function updateBookHolder(book, newHolder) {
+  const newBookState = Object.assign(book, {takenBy: newHolder});
+  return axios.put(`/books/${book.id}`, newBookState)
+    .then(({data}) => {
+      console.log(data);
+      return data;
     });
 }

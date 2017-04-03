@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Collapse, Button, Tag, Row, Col } from 'antd';
+import { updateBookHolder } from '../api';
 
 class BookList extends Component {
   constructor(props) {
@@ -7,7 +8,7 @@ class BookList extends Component {
     this.state = {
       books: []
     }
-    this.takeBook = this.takeBook.bind(this);
+    this.onBookHolderChange = this.onBookHolderChange.bind(this);
     this.renderControls = this.renderControls.bind(this);
   }
 
@@ -19,16 +20,21 @@ class BookList extends Component {
       });
   }
 
-  takeBook(e) {
+  onBookHolderChange(book, user, e) {
     e.preventDefault();
     e.stopPropagation();
+    updateBookHolder(book, user)
+      .then(newBook => {
+        this.setState({books: this.state.books.map(book => (book.id === newBook.id ? newBook : book))})
+      });
   }
 
   renderControls(book) {
+    const user = this.props.user;
     if (book.takenBy) {
-      const returnBtn = null;
-      if (this.props.user && book.takenBy.userId === this.props.user.id) {
-        returnBtn = <Button onClick={this.returnBook}>Return</Button>;
+      let returnBtn = null;
+      if (user && book.takenBy.id === this.props.user.id) {
+        returnBtn = <Button onClick={this.onBookHolderChange.bind(this, book, null)}>Return</Button>;
       }
       return (
         <div>
@@ -37,9 +43,9 @@ class BookList extends Component {
         </div>
       );
     } else {
-      if (this.props.user) {
+      if (user) {
         return (
-          <Button onClick={this.takeBook}>Take</Button>
+          <Button onClick={this.onBookHolderChange.bind(this, book, user)}>Take</Button>
         );
       }
     }
