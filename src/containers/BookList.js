@@ -4,8 +4,11 @@ import { Collapse, Button, Tag, Row, Col } from 'antd';
 class BookList extends Component {
   constructor(props) {
     super(props);
-    this.state = {books: []}
+    this.state = {
+      books: []
+    }
     this.takeBook = this.takeBook.bind(this);
+    this.renderControls = this.renderControls.bind(this);
   }
 
   componentWillMount() {
@@ -21,19 +24,26 @@ class BookList extends Component {
     e.stopPropagation();
   }
 
-  render() {
-    const renderTakenInfo = (book) => {
+  renderControls(book) {
       if (book.takenBy) {
+        const returnBtn = null;
+        if (this.props.user && book.takenBy.userId === this.props.user.id) {
+          returnBtn = <Button onClick={this.returnBook}>Return</Button>;
+        }
         return (
-          <Tag color="pink">{book.takenBy.name}</Tag>
+          <div>
+            <Tag color="pink">{book.takenBy.name}</Tag>
+            {returnBtn}
+          </div>
         );
       } else {
         return (
           <Button onClick={this.takeBook}>Take</Button>
         );
       }
-    }
+  }
 
+  render() {
     return (
       <Collapse bordered={false}>
         {
@@ -42,7 +52,7 @@ class BookList extends Component {
               <Row>
                 <Col span={18}>
                   <span style={{fontWeight: 'bold'}}>{book.title}</span> by {book.author}</Col>
-                <Col span={6}>{renderTakenInfo(book)}</Col>
+                <Col span={6}>{this.renderControls(book)}</Col>
               </Row>
             );
             return (
