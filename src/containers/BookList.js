@@ -25,22 +25,24 @@ class BookList extends Component {
   }
 
   renderControls(book) {
-      if (book.takenBy) {
-        const returnBtn = null;
-        if (this.props.user && book.takenBy.userId === this.props.user.id) {
-          returnBtn = <Button onClick={this.returnBook}>Return</Button>;
-        }
-        return (
-          <div>
-            <Tag color="pink">{book.takenBy.name}</Tag>
-            {returnBtn}
-          </div>
-        );
-      } else {
+    if (book.takenBy) {
+      const returnBtn = null;
+      if (this.props.user && book.takenBy.userId === this.props.user.id) {
+        returnBtn = <Button onClick={this.returnBook}>Return</Button>;
+      }
+      return (
+        <div>
+          <Tag color="pink">{book.takenBy.name}</Tag>
+          {returnBtn}
+        </div>
+      );
+    } else {
+      if (this.props.user) {
         return (
           <Button onClick={this.takeBook}>Take</Button>
         );
       }
+    }
   }
 
   render() {
