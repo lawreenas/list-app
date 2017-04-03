@@ -52,10 +52,20 @@ class BookList extends Component {
   }
 
   render() {
+    const { searchTerm } = this.props;
+    const { books } = this.state;
+
+    const filteredBooks = books
+          .filter(book =>
+                  book.title.toUpperCase().includes(searchTerm.toUpperCase()) ||
+                  book.author.toUpperCase().includes(searchTerm.toUpperCase())
+                );
+
     return (
       <Collapse bordered={false}>
         {
-          this.state.books.map(book => {
+
+          filteredBooks.map(book => {
             const header =(
               <Row>
                 <Col span={18}>

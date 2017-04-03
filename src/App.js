@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Input } from 'antd';
 import GoogleLogin from 'react-google-login';
 import BookList from './containers/BookList';
 import { fetchUser, registerUser } from './api';
@@ -12,6 +12,7 @@ class App extends Component {
     };
     this.onLogin = this.onLogin.bind(this);
     this.onLogout = this.onLogout.bind(this);
+    this.onSearch = this.onSearch.bind(this);
   }
 
   onLogin(e) {
@@ -32,6 +33,10 @@ class App extends Component {
   onLogout() {
     this.setState({ user: null });
     localStorage.setItem('user', null);
+  }
+
+  onSearch(searchTerm) {
+    this.setState({ searchTerm })
   }
 
   renderLogin() {
@@ -55,7 +60,7 @@ class App extends Component {
   }
 
   render() {
-    const {user} = this.state;
+    const {user, searchTerm} = this.state;
     return (
       <div className="App">
         <Row>
@@ -64,7 +69,14 @@ class App extends Component {
               {this.renderLogin()}
             </Row>
             <Row>
-              <BookList user={user}/>
+              <Input.Search
+                placeholder="Enter title or author"
+                style={{ width: 300 }}
+                onSearch={value => this.onSearch(value)}
+                />
+            </Row>
+            <Row>
+              <BookList user={user} searchTerm={searchTerm || ''}/>
             </Row>
           </Col>
         </Row>
